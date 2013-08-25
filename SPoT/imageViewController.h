@@ -1,5 +1,5 @@
 //
-//  SPoTViewController.h
+//  imageViewController.h
 //  SPoT
 //
 //  Created by Teddy Wyly on 8/22/13.
@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SPoTViewController : UIViewController
+@interface imageViewController : UIViewController
+
+@property (strong, nonatomic) NSURL *imageURL;
 
 @end
