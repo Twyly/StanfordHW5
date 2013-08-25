@@ -9,7 +9,7 @@
 #import "FlickrPhotoTVC.h"
 #import "FlickrFetcher.h"
 
-@interface FlickrPhotoTVC ()
+@interface FlickrPhotoTVC () <UISplitViewControllerDelegate>
 
 @end
 
@@ -35,11 +35,39 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    self.splitViewController.delegate = self;
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+# pragma mark - Split View Controller Delegate
+
+- (BOOL)splitViewController:(UISplitViewController *)svc
+   shouldHideViewController:(UIViewController *)vc
+              inOrientation:(UIInterfaceOrientation)orientation
+{
+    return !UIInterfaceOrientationIsLandscape(orientation);
+}
+
+- (void)splitViewController:(UISplitViewController *)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem *)barButtonItem forPopoverController:(UIPopoverController *)pc
+{
+
+}
+
+- (void)splitViewController:(UISplitViewController *)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem
+{
+
+}
+
+
 
 - (void)setPhotos:(NSArray *)photos
 {

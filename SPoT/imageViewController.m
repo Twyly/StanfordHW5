@@ -12,6 +12,7 @@
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) UIImageView *imageView;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *titleBarButtonItem;
 
 @end
 
@@ -21,6 +22,12 @@
 {
     if (!_imageView) _imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
     return _imageView;
+}
+
+- (void)setTitle:(NSString *)title
+{
+    super.title = title;
+    self.titleBarButtonItem.title = title;
 }
 
 - (void)setImageURL:(NSURL *)imageURL
@@ -62,6 +69,13 @@
     return self;
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"Show Photo Popover"]) {
+        NSLog(@"Segue");
+    }
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -70,6 +84,7 @@
     self.scrollView.delegate = self;
     self.scrollView.minimumZoomScale = 0.2;
     self.scrollView.maximumZoomScale = 5.0;
+    self.titleBarButtonItem.title = self.title;
 	
 }
 
