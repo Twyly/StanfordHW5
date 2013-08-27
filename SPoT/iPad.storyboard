@@ -159,7 +159,6 @@
                                 <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <items>
-                                    <barButtonItem title="Photos" id="dT4-vE-oRs"/>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="WJf-bZ-bPb"/>
                                     <barButtonItem title="Title" style="plain" id="iG7-cD-RT3"/>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="rsb-5I-JpQ"/>
