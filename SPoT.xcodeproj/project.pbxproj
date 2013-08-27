@@ -27,6 +27,7 @@
 		F5D8C59617C678A8000EF438 /* FlickrFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D8C59517C678A8000EF438 /* FlickrFetcher.m */; };
 		F5D8C59917C67B02000EF438 /* StanfordFlickrPhotoTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D8C59817C67B02000EF438 /* StanfordFlickrPhotoTVC.m */; };
 		F5D8C59C17C67EFE000EF438 /* RecentFlickrPhotoTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D8C59B17C67EFE000EF438 /* RecentFlickrPhotoTVC.m */; };
+		F5FEBA1A17CD1C0300547302 /* NSDataCache.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FEBA1917CD1C0300547302 /* NSDataCache.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,8 @@
 		F5D8C59817C67B02000EF438 /* StanfordFlickrPhotoTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StanfordFlickrPhotoTVC.m; sourceTree = "<group>"; };
 		F5D8C59A17C67EFE000EF438 /* RecentFlickrPhotoTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecentFlickrPhotoTVC.h; sourceTree = "<group>"; };
 		F5D8C59B17C67EFE000EF438 /* RecentFlickrPhotoTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecentFlickrPhotoTVC.m; sourceTree = "<group>"; };
+		F5FEBA1817CD1C0300547302 /* NSDataCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDataCache.h; sourceTree = "<group>"; };
+		F5FEBA1917CD1C0300547302 /* NSDataCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDataCache.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +145,8 @@
 				F5D8C59817C67B02000EF438 /* StanfordFlickrPhotoTVC.m */,
 				F5D8C59A17C67EFE000EF438 /* RecentFlickrPhotoTVC.h */,
 				F5D8C59B17C67EFE000EF438 /* RecentFlickrPhotoTVC.m */,
+				F5FEBA1817CD1C0300547302 /* NSDataCache.h */,
+				F5FEBA1917CD1C0300547302 /* NSDataCache.m */,
 				F5D8C59217C678A8000EF438 /* FlickrFetcher */,
 				F5D8C56F17C66F7B000EF438 /* Images.xcassets */,
 				F5D8C55E17C66F7B000EF438 /* Supporting Files */,
@@ -293,6 +298,7 @@
 				F5D8C58E17C66FBA000EF438 /* imageViewController.m in Sources */,
 				F5D8C59117C677DB000EF438 /* FlickrPhotoTVC.m in Sources */,
 				F5D8C59C17C67EFE000EF438 /* RecentFlickrPhotoTVC.m in Sources */,
+				F5FEBA1A17CD1C0300547302 /* NSDataCache.m in Sources */,
 				F5D8C56817C66F7B000EF438 /* SPoTAppDelegate.m in Sources */,
 				F5D8C59617C678A8000EF438 /* FlickrFetcher.m in Sources */,
 				F5BD198517C7B3EC00FAEB6B /* StanfordCategoriesTVC.m in Sources */,

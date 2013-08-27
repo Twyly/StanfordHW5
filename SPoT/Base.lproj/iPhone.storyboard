@@ -83,6 +83,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="wE1-gC-GLJ">
+                                <rect key="frame" x="150" y="230" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rpm-Ym-ZqU">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -90,15 +94,18 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="rpm-Ym-ZqU" firstAttribute="trailing" secondItem="bJL-ez-Pba" secondAttribute="trailing" id="3Ba-eg-a7U"/>
-                            <constraint firstItem="rpm-Ym-ZqU" firstAttribute="leading" secondItem="bJL-ez-Pba" secondAttribute="leading" id="CFk-xT-3qg"/>
-                            <constraint firstItem="rpm-Ym-ZqU" firstAttribute="top" secondItem="bJL-ez-Pba" secondAttribute="top" id="pav-us-fUl"/>
-                            <constraint firstItem="rpm-Ym-ZqU" firstAttribute="bottom" secondItem="bJL-ez-Pba" secondAttribute="bottom" id="x0D-OF-xHm"/>
+                            <constraint firstItem="rpm-Ym-ZqU" firstAttribute="top" secondItem="bJL-ez-Pba" secondAttribute="top" id="27T-AX-eQ7"/>
+                            <constraint firstItem="rpm-Ym-ZqU" firstAttribute="trailing" secondItem="bJL-ez-Pba" secondAttribute="trailing" id="3uB-4e-ozP"/>
+                            <constraint firstItem="rpm-Ym-ZqU" firstAttribute="centerY" secondItem="wE1-gC-GLJ" secondAttribute="centerY" id="7y3-oC-vjq"/>
+                            <constraint firstItem="rpm-Ym-ZqU" firstAttribute="bottom" secondItem="bJL-ez-Pba" secondAttribute="bottom" id="a0U-4f-0Fw"/>
+                            <constraint firstItem="rpm-Ym-ZqU" firstAttribute="leading" secondItem="bJL-ez-Pba" secondAttribute="leading" id="bQg-wK-b7C"/>
+                            <constraint firstItem="rpm-Ym-ZqU" firstAttribute="centerX" secondItem="wE1-gC-GLJ" secondAttribute="centerX" id="egF-tp-Fe7"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="qiQ-On-wlR"/>
                     <connections>
                         <outlet property="scrollView" destination="rpm-Ym-ZqU" id="cel-5i-qYe"/>
+                        <outlet property="spinner" destination="wE1-gC-GLJ" id="Iux-DO-vxr"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Gi4-LE-Kmw" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -196,6 +203,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="xr1-3i-xVE"/>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="AEM-tc-xu4">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </refreshControl>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nv9-XS-Hjt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -246,6 +256,6 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="5dr-5K-9Em"/>
+        <segue reference="gC1-O5-5Ui"/>
     </inferredMetricsTieBreakers>
 </document>

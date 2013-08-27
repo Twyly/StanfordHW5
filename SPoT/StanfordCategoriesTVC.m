@@ -29,8 +29,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self loadLatestStanfordPhotos];
+    [self.refreshControl addTarget:self
+                            action:@selector(loadLatestStanfordPhotos)
+                  forControlEvents:UIControlEventValueChanged];
     
-    self.photos = [FlickrFetcher stanfordPhotos];
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -43,6 +46,20 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)loadLatestStanfordPhotos
+{
+    [self.refreshControl beginRefreshing];
+    dispatch_queue_t loaderQ = dispatch_queue_create("stanford latest loader", NULL);
+    dispatch_async(loaderQ, ^{
+        NSArray *latestPhotos = [FlickrFetcher stanfordPhotos];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.photos = latestPhotos;
+            [self.refreshControl endRefreshing];
+            [self.tableView reloadData];
+        });
+    });
 }
 
 #pragma mark - Table view data source

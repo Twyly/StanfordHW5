@@ -7,12 +7,14 @@
 //
 
 #import "imageViewController.h"
+#import "NSDataCache.h"
 
 @interface imageViewController () <UIScrollViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *titleBarButtonItem;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
 
 @end
 
@@ -43,17 +45,42 @@
     if (self.scrollView) {
         self.scrollView.contentSize = CGSizeZero;
         self.imageView.image = nil;
-        
-        NSData *imageData = [NSData dataWithContentsOfURL:self.imageURL];
-        UIImage *image = [[UIImage alloc] initWithData:imageData];
-        if (image) {
-            self.scrollView.zoomScale = 1.0;
-            self.scrollView.contentSize = image.size;
-            self.imageView.image = image;
-            self.imageView.frame = CGRectMake(0, 0, image.size.width, image.size.height);
-        }
+
+        [self.spinner startAnimating];
+        NSURL *imageURL = self.imageURL;
+        dispatch_queue_t imageFetchQ = dispatch_queue_create("image fetcher", NULL);
+        dispatch_async(imageFetchQ, ^{
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = YES; // bad
+            NSData *imageData = [NSData dataWithContentsOfURL:self.imageURL];
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+            UIImage *image = [[UIImage alloc] initWithData:imageData];
+            if (self.imageURL == imageURL) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (image) {
+                        self.scrollView.zoomScale = 1.0;
+                        self.scrollView.contentSize = image.size;
+                        self.imageView.image = image;
+                        self.imageView.frame = CGRectMake(0, 0, image.size.width, image.size.height);
+                    }
+                    [self.spinner stopAnimating];
+                });
+            }
+        });
     }
 }
+
+//- (void)test
+//{
+//    NSFileManager *fileManager = [[NSFileManager alloc] init];
+//    NSURL *cachesDirectory = [[fileManager URLsForDirectory:NSCachesDirectory inDomains:NSUserDomainMask] lastObject];
+//    NSURL *filePath = [cachesDirectory URLByAppendingPathComponent:@"cacheForPhotoImages"];
+//}
+//
+//- (void)cacheImage:(NSString *)imageLocation UIImage:(UIImage *)image
+//{
+//    NSURL *imageLocationURL = [NSURL URLWithString:imageLocation];
+//    
+//}
 
 #pragma mark - Scroll View Delegate
 
