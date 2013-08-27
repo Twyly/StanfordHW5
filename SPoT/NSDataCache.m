@@ -21,44 +21,45 @@
 
 - (BOOL)cacheData:(NSData *)data withIdentifier:(NSString *)identifier
 {
-    NSArray *directoryContents = [self.fileManager contentsOfDirectoryAtURL:[NSURL fileURLWithPath:self.cacheDirectory] includingPropertiesForKeys:@[NSURLContentAccessDateKey] options:NSDirectoryEnumerationSkipsHiddenFiles error:nil];
+//    NSArray *directoryContents = [self.fileManager contentsOfDirectoryAtURL:[NSURL fileURLWithPath:self.cacheDirectory] includingPropertiesForKeys:@[NSURLContentAccessDateKey] options:NSDirectoryEnumerationSkipsHiddenFiles error:nil];
+//    
+//    
+//    NSMutableArray *filesFromNewToOld = [[directoryContents sortedArrayUsingComparator:^NSComparisonResult(NSURL *url1, NSURL *url2) {
+//        NSDate *date1 = [url1 resourceValuesForKeys:@[NSURLContentAccessDateKey] error:nil][NSURLContentAccessDateKey];
+//        NSDate *date2 = [url2 resourceValuesForKeys:@[NSURLContentAccessDateKey] error:nil][NSURLContentAccessDateKey];
+//        
+//        return [date2 compare:date1];
+//        
+//    }] mutableCopy];
     
-    NSMutableArray *filesFromNewToOld = [[directoryContents sortedArrayUsingComparator:^NSComparisonResult(NSURL *url1, NSURL *url2) {
-        NSDate *date1 = [url1 resourceValuesForKeys:@[NSURLContentAccessDateKey] error:nil][NSURLContentAccessDateKey];
-        NSDate *date2 = [url2 resourceValuesForKeys:@[NSURLContentAccessDateKey] error:nil][NSURLContentAccessDateKey];
-        
-        return [date2 compare:date1];
-        
-    }] mutableCopy];
+//    while (self.cacheSize >= self.maximumCacheSize && [directoryContents count] > 0) {
+//        NSLog(@"cacheSize = %i, maximumCacheSize = %i", self.cacheSize, self.maximumCacheSize);
+//        
+//        NSError *error = nil;
+//        
+//        if (![self.fileManager removeItemAtURL:[filesFromNewToOld lastObject] error:&error]) NSLog(@"%@", [error localizedDescription]);
+//        else [filesFromNewToOld removeLastObject];
+//        
+//    }
     
-    while (self.cacheSize >= self.maximumCacheSize && [directoryContents count] > 0) {
-        NSLog(@"cacheSize = %i, maximumCacheSize = %i", self.cacheSize, self.maximumCacheSize);
-        
-        NSError *error = nil;
-        
-        if (![self.fileManager removeItemAtURL:[filesFromNewToOld lastObject] error:&error]) NSLog(@"%@", [error localizedDescription]);
-        else [filesFromNewToOld removeLastObject];
-        
-    }
+    NSURL *targetFilePath = [self.cacheDirectory URLByAppendingPathComponent:identifier];
     
-    NSString *targetFilePath = [self.cacheDirectory stringByAppendingString:identifier];
-    
-    return [data writeToFile:targetFilePath atomically:YES];
+    return [data writeToURL:targetFilePath atomically:YES];
     
     
 }
 
 - (NSData *)dataInCacheForIdentifier:(NSString *)identifier
 {
-    NSString *targetFilePath = [self.cacheDirectory stringByAppendingString:identifier];
+    NSURL *targetFilePath = [self.cacheDirectory URLByAppendingPathComponent:identifier];
     NSData *data;
     
-    if ([self.fileManager fileExistsAtPath:targetFilePath]) {
-        data = [[NSData alloc] initWithContentsOfFile:targetFilePath];
+    if ([targetFilePath isFileURL]) {
+        data = [NSData dataWithContentsOfURL:targetFilePath];
     }
     
     return data;
-    
+   
 }
 
 + (NSDataCache *)sharedInstance
@@ -73,15 +74,13 @@
     return _sharedObject;
 }
 
-- (NSString *)cacheDirectory
+- (NSURL *)cacheDirectory
 {
     if (!_cacheDirectory) {
-        NSArray *cachesDirectoriesURLArray = [self.fileManager URLsForDirectory:NSCachesDirectory inDomains:NSUserDomainMask];
-        _cacheDirectory = [[cachesDirectoriesURLArray lastObject] pathExtension];
+        NSArray *cachesDirectoriesURLsArray = [self.fileManager URLsForDirectory:NSCachesDirectory inDomains:NSUserDomainMask];
+        _cacheDirectory = [cachesDirectoriesURLsArray objectAtIndex:0];
     }
-    
     return _cacheDirectory;
-    
 }
 
 #define MAX_CACHE_SIZE 3 * 1048576
@@ -93,25 +92,25 @@
     return _maximumCacheSize;
 }
 
-- (NSUInteger)cacheSize
-{
-    NSUInteger fileSize = floor(M_1_PI * 10000000);
-    
-    if (self.cacheDirectory != nil) {
-        fileSize = 0;
-        NSArray *filesArray = [self.fileManager contentsOfDirectoryAtPath:self.cacheDirectory error:nil];
-        NSString *fileName;
-        
-        for (fileName in filesArray) {
-            NSDictionary *filesDictionary = [self.fileManager attributesOfItemAtPath:[self.cacheDirectory stringByAppendingPathComponent:fileName] error:nil];
-            fileSize += [filesDictionary fileSize];
-        }
-        
-    }
-    
-    return fileSize;
-    
-}
+//- (NSUInteger)cacheSize
+//{
+//    NSUInteger fileSize = floor(M_1_PI * 10000000);
+//    
+//    if (self.cacheDirectory != nil) {
+//        fileSize = 0;
+//        NSArray *filesArray = [self.fileManager contentsOfDirectoryAtPath:self.cacheDirectory error:nil];
+//        NSString *fileName;
+//        
+//        for (fileName in filesArray) {
+//            NSDictionary *filesDictionary = [self.fileManager attributesOfItemAtPath:[self.cacheDirectory stringByAppendingPathComponent:fileName] error:nil];
+//            fileSize += [filesDictionary fileSize];
+//        }
+//        
+//    }
+//    
+//    return fileSize;
+//    
+//}
 
 
 - (NSFileManager *)fileManager

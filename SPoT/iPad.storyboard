@@ -164,23 +164,25 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="rsb-5I-JpQ"/>
                                 </items>
                             </toolbar>
-                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="mxq-WM-Xtl">
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="mxq-WM-Xtl">
                                 <rect key="frame" x="374" y="502" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="oEG-Nm-Wxs" firstAttribute="centerX" secondItem="mxq-WM-Xtl" secondAttribute="centerX" id="EGc-He-YXO"/>
-                            <constraint firstItem="oEG-Nm-Wxs" firstAttribute="bottom" secondItem="O2n-FZ-6td" secondAttribute="bottom" id="EX3-wO-yJg"/>
-                            <constraint firstItem="oEG-Nm-Wxs" firstAttribute="top" secondItem="O2L-cg-9em" secondAttribute="bottom" id="QuZ-Be-WL2"/>
-                            <constraint firstItem="oEG-Nm-Wxs" firstAttribute="trailing" secondItem="O2L-cg-9em" secondAttribute="trailing" id="Tbj-mH-8nj"/>
-                            <constraint firstItem="oEG-Nm-Wxs" firstAttribute="leading" secondItem="O2L-cg-9em" secondAttribute="leading" id="WA9-Xw-sI4"/>
-                            <constraint firstItem="oEG-Nm-Wxs" firstAttribute="top" secondItem="O2n-FZ-6td" secondAttribute="top" constant="44" id="dvh-bD-WbA"/>
-                            <constraint firstItem="oEG-Nm-Wxs" firstAttribute="leading" secondItem="O2n-FZ-6td" secondAttribute="leading" id="ik9-f7-D5C"/>
-                            <constraint firstItem="oEG-Nm-Wxs" firstAttribute="trailing" secondItem="O2n-FZ-6td" secondAttribute="trailing" id="k7B-Fd-onF"/>
+                            <constraint firstItem="mxq-WM-Xtl" firstAttribute="centerY" secondItem="O2n-FZ-6td" secondAttribute="centerY" id="2kY-Ku-EYe"/>
+                            <constraint firstItem="O2L-cg-9em" firstAttribute="centerX" secondItem="mxq-WM-Xtl" secondAttribute="centerX" id="4mJ-OY-2Mu"/>
+                            <constraint firstItem="O2L-cg-9em" firstAttribute="trailing" secondItem="O2n-FZ-6td" secondAttribute="trailing" id="5xQ-qa-zSc"/>
+                            <constraint firstItem="oEG-Nm-Wxs" firstAttribute="bottom" secondItem="O2n-FZ-6td" secondAttribute="bottom" id="ErZ-YK-DSB"/>
+                            <constraint firstItem="O2L-cg-9em" firstAttribute="leading" secondItem="O2n-FZ-6td" secondAttribute="leading" id="L4u-j4-gtT"/>
+                            <constraint firstItem="O2L-cg-9em" firstAttribute="top" secondItem="O2n-FZ-6td" secondAttribute="top" id="XMd-kJ-y3f"/>
+                            <constraint firstItem="oEG-Nm-Wxs" firstAttribute="trailing" secondItem="O2L-cg-9em" secondAttribute="trailing" id="hOL-ci-8uN"/>
+                            <constraint firstItem="oEG-Nm-Wxs" firstAttribute="top" secondItem="O2L-cg-9em" secondAttribute="bottom" id="mJ1-dZ-DVH"/>
+                            <constraint firstItem="oEG-Nm-Wxs" firstAttribute="leading" secondItem="O2L-cg-9em" secondAttribute="leading" id="pon-br-gvW"/>
                         </constraints>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <connections>
                         <outlet property="scrollView" destination="oEG-Nm-Wxs" id="Tx1-Q3-BOf"/>
                         <outlet property="spinner" destination="mxq-WM-Xtl" id="JDJ-Cs-WkI"/>

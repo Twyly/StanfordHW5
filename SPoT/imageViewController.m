@@ -40,6 +40,9 @@
     [self resetImage];
 }
 
+
+// Blocks finish after didlayoutsubviews- need to fix this
+
 - (void)resetImage
 {
     if (self.scrollView) {
@@ -47,46 +50,77 @@
         self.imageView.image = nil;
 
         [self.spinner startAnimating];
+        
+        //TEST THIS NEEDS TO BE A UNIQUE STRING BASED UPON ID
+        NSString *identifier = @"Spyro"; //[self.imageURL absoluteString];
+        
         NSURL *imageURL = self.imageURL;
         dispatch_queue_t imageFetchQ = dispatch_queue_create("image fetcher", NULL);
         dispatch_async(imageFetchQ, ^{
-            [UIApplication sharedApplication].networkActivityIndicatorVisible = YES; // bad
-            NSData *imageData = [NSData dataWithContentsOfURL:self.imageURL];
-            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-            UIImage *image = [[UIImage alloc] initWithData:imageData];
-            if (self.imageURL == imageURL) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (image) {
-                        self.scrollView.zoomScale = 1.0;
-                        self.scrollView.contentSize = image.size;
-                        self.imageView.image = image;
-                        self.imageView.frame = CGRectMake(0, 0, image.size.width, image.size.height);
-                    }
-                    [self.spinner stopAnimating];
-                });
+            
+            if ([[NSDataCache sharedInstance] dataInCacheForIdentifier:identifier]) {
+                
+                NSData *imageData = [[NSDataCache sharedInstance] dataInCacheForIdentifier:identifier];
+                
+                UIImage *image = [[UIImage alloc] initWithData:imageData];
+                if (self.imageURL == imageURL) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (image) {
+                            NSLog(@"Cached!");
+                            self.scrollView.zoomScale = 1.0;
+                            self.scrollView.contentSize = image.size;
+                            self.imageView.image = image;
+                            self.imageView.frame = CGRectMake(0, 0, image.size.width, image.size.height);
+                            [self setAppropiateZoomScale];
+                        }
+                        [self.spinner stopAnimating];
+                    });
+                }
+                
+            } else {
+                [UIApplication sharedApplication].networkActivityIndicatorVisible = YES; // bad
+                NSData *imageData = [NSData dataWithContentsOfURL:self.imageURL];
+                [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+                
+                [[NSDataCache sharedInstance] cacheData:imageData withIdentifier:identifier];
+                if ([[NSDataCache sharedInstance] dataInCacheForIdentifier:identifier]) NSLog(@"File Exists");
+                
+                UIImage *image = [[UIImage alloc] initWithData:imageData];
+                if (self.imageURL == imageURL) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (image) {
+                            self.scrollView.zoomScale = 1.0;
+                            self.scrollView.contentSize = image.size;
+                            self.imageView.image = image;
+                            self.imageView.frame = CGRectMake(0, 0, image.size.width, image.size.height);
+                            [self setAppropiateZoomScale];
+                        }
+                        [self.spinner stopAnimating];
+                    });
+                }
             }
         });
     }
 }
 
-//- (void)test
-//{
-//    NSFileManager *fileManager = [[NSFileManager alloc] init];
-//    NSURL *cachesDirectory = [[fileManager URLsForDirectory:NSCachesDirectory inDomains:NSUserDomainMask] lastObject];
-//    NSURL *filePath = [cachesDirectory URLByAppendingPathComponent:@"cacheForPhotoImages"];
-//}
-//
-//- (void)cacheImage:(NSString *)imageLocation UIImage:(UIImage *)image
-//{
-//    NSURL *imageLocationURL = [NSURL URLWithString:imageLocation];
-//    
-//}
+                                                                            
+                                                                            
+
 
 #pragma mark - Scroll View Delegate
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
     return self.imageView;
+}
+
+- (void)setAppropiateZoomScale
+{
+    CGSize photoSize = self.imageView.bounds.size;
+    float ratioX = photoSize.width / self.scrollView.bounds.size.width;
+    float ratioY = photoSize.height / self.scrollView.bounds.size.height;
+    float scaleFactor = 1.0 / MAX(ratioX, ratioY);
+    [self.scrollView setZoomScale:scaleFactor animated:NO];
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -119,15 +153,9 @@
 
 - (void)viewDidLayoutSubviews
 {
-    
-    CGSize photoSize = self.imageView.bounds.size;
-    float ratioX = photoSize.width / self.scrollView.bounds.size.width;
-    float ratioY = photoSize.height / self.scrollView.bounds.size.height;
-    float scaleFactor = 1.0 / MAX(ratioX, ratioY);
-    [self.scrollView setZoomScale:scaleFactor animated:NO];
-
-    
+    [self setAppropiateZoomScale];
 }
+
 
 - (void)didReceiveMemoryWarning
 {
