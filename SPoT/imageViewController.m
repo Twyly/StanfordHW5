@@ -51,7 +51,8 @@
 
         [self.spinner startAnimating];
         
-        NSString *identifier = [self.imageURL lastPathComponent];
+        NSString *identifier = @"Test";
+        if ([self.imageURL lastPathComponent]) identifier = [self.imageURL lastPathComponent];
         NSLog(@"identifier = %@\n", identifier);
         
         NSURL *imageURL = self.imageURL;
@@ -66,7 +67,6 @@
                 if (self.imageURL == imageURL) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         if (image) {
-                            NSLog(@"Cached!");
                             self.scrollView.zoomScale = 1.0;
                             self.scrollView.contentSize = image.size;
                             self.imageView.image = image;
@@ -82,9 +82,7 @@
                 NSData *imageData = [NSData dataWithContentsOfURL:self.imageURL];
                 [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                 
-                [[NSDataCache sharedInstance] cacheData:imageData withIdentifier:identifier];
-                if ([[NSDataCache sharedInstance] dataInCacheForIdentifier:identifier]) NSLog(@"File Exists");
-                
+                [[NSDataCache sharedInstance] cacheData:imageData withIdentifier:identifier];                
                 UIImage *image = [[UIImage alloc] initWithData:imageData];
                 if (self.imageURL == imageURL) {
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -102,9 +100,6 @@
         });
     }
 }
-
-                                                                            
-                                                                            
 
 
 #pragma mark - Scroll View Delegate

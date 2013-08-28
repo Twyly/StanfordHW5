@@ -32,21 +32,11 @@
         
     }] mutableCopy];
     
-    while (self.cacheSize >= self.maximumCacheSize) {
+    while (self.cacheSize >= self.maximumCacheSize && [allImages count] > 0) {
         NSLog(@"Object Removed");
-        [self.fileManager removeItemAtPath:[orderedImages lastObject] error:nil];
+        [self.fileManager removeItemAtURL:[orderedImages lastObject] error:nil]; //:[orderedImages lastObject] error:nil];
         [orderedImages removeLastObject];
     }
-    
-//    while (self.cacheSize >= self.maximumCacheSize && [directoryContents count] > 0) {
-//        NSLog(@"cacheSize = %i, maximumCacheSize = %i", self.cacheSize, self.maximumCacheSize);
-//        
-//        NSError *error = nil;
-//        
-//        if (![self.fileManager removeItemAtURL:[filesFromNewToOld lastObject] error:&error]) NSLog(@"%@", [error localizedDescription]);
-//        else [filesFromNewToOld removeLastObject];
-//        
-//    }
     
     NSURL *targetFilePath = [self.cacheDirectory URLByAppendingPathComponent:identifier];
     return [data writeToURL:targetFilePath atomically:YES];
@@ -55,8 +45,9 @@
 
 - (NSData *)dataInCacheForIdentifier:(NSString *)identifier
 {
-    NSURL *targetFilePath = [self.cacheDirectory URLByAppendingPathComponent:identifier];
+    NSURL *targetFilePath;
     NSData *data;
+    if (identifier) targetFilePath = [self.cacheDirectory URLByAppendingPathComponent:identifier];
     
     if ([targetFilePath isFileURL]) {
         data = [NSData dataWithContentsOfURL:targetFilePath];
@@ -85,14 +76,13 @@
     return _cacheDirectory;
 }
 
-#define MAX_CACHE_SIZE 3 * 1048576
-#define MAX_CACHE_SIZE_IPAD 12 * 1048576
+#define MAX_CACHE_SIZE 3 * 500000
+#define MAX_CACHE_SIZE_IPAD 12 * 500000
 
 - (NSUInteger)maximumCacheSize
 {
-    if (!_maximumCacheSize) _maximumCacheSize = self.isRunningOnIpad ? !MAX_CACHE_SIZE : MAX_CACHE_SIZE_IPAD;
-    return 2000000;
-    //return _maximumCacheSize;
+    if (!_maximumCacheSize) _maximumCacheSize = !self.isRunningOnIpad ? MAX_CACHE_SIZE : MAX_CACHE_SIZE_IPAD;
+    return _maximumCacheSize;
 }
 
 - (NSUInteger)cacheSize

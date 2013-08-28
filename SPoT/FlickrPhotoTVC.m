@@ -84,7 +84,13 @@
             if ([segue.identifier isEqualToString:@"Show Image"]) {
                 SEL setURLSelector = sel_registerName("setImageURL:");
                 if ([segue.destinationViewController respondsToSelector:setURLSelector]) {
-                    NSURL *url = [FlickrFetcher urlForPhoto:self.photos[indexPath.row] format:FlickrPhotoFormatLarge];
+                    BOOL isOnIpad = [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad;
+                    NSURL *url;
+                    if (isOnIpad) {
+                        url = [FlickrFetcher urlForPhoto:self.photos[indexPath.row] format:FlickrPhotoFormatOriginal];
+                    } else {
+                        url = [FlickrFetcher urlForPhoto:self.photos[indexPath.row] format:FlickrPhotoFormatLarge];
+                    }
                     [segue.destinationViewController performSelector:setURLSelector withObject:url];
                     [segue.destinationViewController setTitle:[self titleForRow:indexPath.row]];
                     
