@@ -33,6 +33,8 @@
     }] mutableCopy];
     
     while (self.cacheSize >= self.maximumCacheSize) {
+        NSLog(@"Object Removed");
+        [self.fileManager removeItemAtPath:[orderedImages lastObject] error:nil];
         [orderedImages removeLastObject];
     }
     
@@ -47,10 +49,7 @@
 //    }
     
     NSURL *targetFilePath = [self.cacheDirectory URLByAppendingPathComponent:identifier];
-    NSLog(@"target path = %@", targetFilePath);
-    
     return [data writeToURL:targetFilePath atomically:YES];
-    
     
 }
 
@@ -92,41 +91,24 @@
 - (NSUInteger)maximumCacheSize
 {
     if (!_maximumCacheSize) _maximumCacheSize = self.isRunningOnIpad ? !MAX_CACHE_SIZE : MAX_CACHE_SIZE_IPAD;
-    return _maximumCacheSize;
+    return 2000000;
+    //return _maximumCacheSize;
 }
 
 - (NSUInteger)cacheSize
 {
     NSArray *allImages = [self.fileManager contentsOfDirectoryAtURL:self.cacheDirectory includingPropertiesForKeys:@[NSURLContentAccessDateKey] options:NSDirectoryEnumerationSkipsHiddenFiles error:nil];
     
-    NSDictionary *fileAttributes = [self.fileManager attributesOfItemAtPath:[self.cacheDirectory path] error:nil];
-    NSNumber *fileSizeNumber = [fileAttributes objectForKey:NSFileSize];
-    long long fileSize = [fileSizeNumber longLongValue];
+    long long totalSize = 0.0;
     
-    NSArray *files = [self.fileManager contentsOfDirectoryAtURL:self.cacheDirectory includingPropertiesForKeys:nil options:NSDirectoryEnumerationSkipsHiddenFiles error:nil];
-    
-    for (NSString *file in files) {
-        
+    for (NSURL *image in allImages) {
+        NSDictionary *fileAttributes = [self.fileManager attributesOfItemAtPath:[image path] error:nil];
+        long long fileSize = [[fileAttributes objectForKey:NSFileSize] longLongValue];
+        totalSize += fileSize;
+        NSLog(@"file size is %lld while total size is %lld", fileSize, totalSize);
     }
     
-    
-//    NSUInteger fileSize = floor(M_1_PI * 10000000);
-//    
-//    if (self.cacheDirectory != nil) {
-//        fileSize = 0;
-//        //NSArray *filesArray = [self.fileManager contentsOfDirectoryAtPath:self.cacheDirectory error:nil];
-//        NSArray *files = [self.fileManager contentsOfDirectoryAtURL:self.cacheDirectory includingPropertiesForKeys:nil options:NSDirectoryEnumerationSkipsHiddenFiles error:nil];
-//        NSString *fileName;
-//        
-//        for (fileName in files) {
-//            NSDictionary *filesDictionary = [self.fileManager attributesOfItemAtPath:[self.cacheDirectory stringByAppendingPathComponent:fileName] error:nil];
-//            fileSize += [filesDictionary fileSize];
-//        }
-//        
-//    }
-//    
-//    return fileSize;
-    return 0.0;
+    return totalSize;
     
 }
 
