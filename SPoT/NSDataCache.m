@@ -21,16 +21,20 @@
 
 - (BOOL)cacheData:(NSData *)data withIdentifier:(NSString *)identifier
 {
-//    NSArray *directoryContents = [self.fileManager contentsOfDirectoryAtURL:[NSURL fileURLWithPath:self.cacheDirectory] includingPropertiesForKeys:@[NSURLContentAccessDateKey] options:NSDirectoryEnumerationSkipsHiddenFiles error:nil];
-//    
-//    
-//    NSMutableArray *filesFromNewToOld = [[directoryContents sortedArrayUsingComparator:^NSComparisonResult(NSURL *url1, NSURL *url2) {
-//        NSDate *date1 = [url1 resourceValuesForKeys:@[NSURLContentAccessDateKey] error:nil][NSURLContentAccessDateKey];
-//        NSDate *date2 = [url2 resourceValuesForKeys:@[NSURLContentAccessDateKey] error:nil][NSURLContentAccessDateKey];
-//        
-//        return [date2 compare:date1];
-//        
-//    }] mutableCopy];
+    NSArray *allImages = [self.fileManager contentsOfDirectoryAtURL:self.cacheDirectory includingPropertiesForKeys:@[NSURLContentAccessDateKey] options:NSDirectoryEnumerationSkipsHiddenFiles error:nil];
+    
+    // ordered from newest to oldest
+    NSMutableArray *orderedImages = [[allImages sortedArrayUsingComparator:^NSComparisonResult(NSURL *url1, NSURL *url2) {
+        NSDate *date1 = [url1 resourceValuesForKeys:@[NSURLContentAccessDateKey] error:nil][NSURLContentAccessDateKey];
+        NSDate *date2 = [url2 resourceValuesForKeys:@[NSURLContentAccessDateKey] error:nil][NSURLContentAccessDateKey];
+        
+        return [date2 compare:date1];
+        
+    }] mutableCopy];
+    
+    while (self.cacheSize >= self.maximumCacheSize) {
+        [orderedImages removeLastObject];
+    }
     
 //    while (self.cacheSize >= self.maximumCacheSize && [directoryContents count] > 0) {
 //        NSLog(@"cacheSize = %i, maximumCacheSize = %i", self.cacheSize, self.maximumCacheSize);
@@ -43,6 +47,7 @@
 //    }
     
     NSURL *targetFilePath = [self.cacheDirectory URLByAppendingPathComponent:identifier];
+    NSLog(@"target path = %@", targetFilePath);
     
     return [data writeToURL:targetFilePath atomically:YES];
     
@@ -57,9 +62,7 @@
     if ([targetFilePath isFileURL]) {
         data = [NSData dataWithContentsOfURL:targetFilePath];
     }
-    
     return data;
-   
 }
 
 + (NSDataCache *)sharedInstance
@@ -92,16 +95,30 @@
     return _maximumCacheSize;
 }
 
-//- (NSUInteger)cacheSize
-//{
+- (NSUInteger)cacheSize
+{
+    NSArray *allImages = [self.fileManager contentsOfDirectoryAtURL:self.cacheDirectory includingPropertiesForKeys:@[NSURLContentAccessDateKey] options:NSDirectoryEnumerationSkipsHiddenFiles error:nil];
+    
+    NSDictionary *fileAttributes = [self.fileManager attributesOfItemAtPath:[self.cacheDirectory path] error:nil];
+    NSNumber *fileSizeNumber = [fileAttributes objectForKey:NSFileSize];
+    long long fileSize = [fileSizeNumber longLongValue];
+    
+    NSArray *files = [self.fileManager contentsOfDirectoryAtURL:self.cacheDirectory includingPropertiesForKeys:nil options:NSDirectoryEnumerationSkipsHiddenFiles error:nil];
+    
+    for (NSString *file in files) {
+        
+    }
+    
+    
 //    NSUInteger fileSize = floor(M_1_PI * 10000000);
 //    
 //    if (self.cacheDirectory != nil) {
 //        fileSize = 0;
-//        NSArray *filesArray = [self.fileManager contentsOfDirectoryAtPath:self.cacheDirectory error:nil];
+//        //NSArray *filesArray = [self.fileManager contentsOfDirectoryAtPath:self.cacheDirectory error:nil];
+//        NSArray *files = [self.fileManager contentsOfDirectoryAtURL:self.cacheDirectory includingPropertiesForKeys:nil options:NSDirectoryEnumerationSkipsHiddenFiles error:nil];
 //        NSString *fileName;
 //        
-//        for (fileName in filesArray) {
+//        for (fileName in files) {
 //            NSDictionary *filesDictionary = [self.fileManager attributesOfItemAtPath:[self.cacheDirectory stringByAppendingPathComponent:fileName] error:nil];
 //            fileSize += [filesDictionary fileSize];
 //        }
@@ -109,8 +126,9 @@
 //    }
 //    
 //    return fileSize;
-//    
-//}
+    return 0.0;
+    
+}
 
 
 - (NSFileManager *)fileManager

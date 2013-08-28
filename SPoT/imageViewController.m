@@ -51,8 +51,8 @@
 
         [self.spinner startAnimating];
         
-        //TEST THIS NEEDS TO BE A UNIQUE STRING BASED UPON ID
-        NSString *identifier = @"Spyro"; //[self.imageURL absoluteString];
+        NSString *identifier = [self.imageURL lastPathComponent];
+        NSLog(@"identifier = %@\n", identifier);
         
         NSURL *imageURL = self.imageURL;
         dispatch_queue_t imageFetchQ = dispatch_queue_create("image fetcher", NULL);
